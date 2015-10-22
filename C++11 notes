@@ -1,1 +1,12 @@
-C++ 11 Notes: Lippman
+C++ 11 Notes: 
+
+
+
+lambda expressions: 
+Lambda is of the form
+[capture](parameters)->return-type {body}
+--Lambda helps in parallel computation with respect on vectors?
+-- named and unnamed lambdas
+-- closure
+-- how is lambda different from an inline function
+-- what is this auto keyword.
