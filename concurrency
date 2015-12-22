@@ -1,5 +1,8 @@
 C++ concurrency
 
 --Support for atomic instructions directly in C++.
---
+
+--std::thread t(func_name);
+
+
 
