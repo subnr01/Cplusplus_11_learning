@@ -4,5 +4,174 @@ C++ concurrency
 
 --std::thread t(func_name);
 
+--thread works with any callable type
+class background_task
+{
+public:
+    void operator()() const
+    {
+        do_something();
+        do_something_else();
+    }
+};
+background_task f;
+std::thread my_thread(f);
+
+If you pass a temporary rather than a named variable, then the syntax  would
+be same as that of a function declaration.
+For example:
+std::thread my_thread(background_task()); //this is a function declaration.
+
+To avoid this, use a set of paranthesis or a new form of declaration
+std::thread my_thread((background_task()));  //extra parenthesis
+std::thread my_thread{background_task()};    //new uniform syntax with braces
+
+Using a lambda expression:
+std::thread my_thread([](
+    do_something();
+    do_something_else();
+});
+
+Once you’ve started your thread, you need to explicitly decide whether to wait for it to finish 
+(by joining with it) or leave it to run on its own (by detaching it).
+
+If you don’t decide before the std::thread object is destroyed,
+then your program is terminated (the std::thread destructor calls std::terminate()).
+
+it’s a bad idea to create a thread within a function that has access to the local variables in that function, 
+unless the thread is guaranteed to finish before the function exits.
+If you need to wait for a thread to complete, you can do this 
+by calling join() on the asso- ciated std::thread instance.
+Make sure in cases of exception, join is called inside the catch block,
+so that join is not skipped in cases of exception handling.
+
+int some_local_state=0;
+func my_func(some_local_state);
+std::thread t(my_func);
+try
+{
+  do_something_in_current_thread();
+}
+catch(...) {
+  t.join();
+  throw;
+}
+t.join();
+}
+A better way to deal with the above situation is to use RAII(Resource Acquisition is Initialisation)
+and provide a class that performs join in its destructor.
+During end of function or exception termination, the objects are destroyed
+in the reverse order of construction, so the thread_guard function is 
+destroyed first, and the thread is joined in its destructor.
+
+class thread_guard
+{
+    std::thread& t;
+public:
+    explicit thread_guard(std::thread& t_):
+        t(t_)
+{}
+~thread_guard()
+{
+  if(t.joinable())
+    {
+      t.join(); 
+    }
+}
+thread_guard(thread_guard const&)=delete; //copy constructor disallowed( delete function sytnax)
+thread_guard& operator=(thread_guard const&)=delete; //assignment operator disallowed( delete function syntax)
+}
+void f() {
+    int some_local_state=0;
+    func my_func(some_local_state);
+    std::thread t(my_func);
+    thread_guard g(t);
+    do_something_in_current_thread();
+}
+
+If you don’t need to wait for a thread to finish, you can avoid this exception-safety issue by detaching it.
+This breaks the association of the thread with the std::thread object and ensures that std::terminate() won’t be 
+called when the std::thread object is destroyed, even though the thread is still running in the background.
+
+Calling detach() on a std::thread object leaves the thread to run in the back- ground, 
+with no direct means of communicating with it. 
+
+If the thread is detached, then
+--No longer possible to wait for the thread to complete
+--No longer possible to obtain a reference to the thread object that references it.
+--ownership and control are passed over to the C++ Run- time Library, which ensures 
+  that the resources associated with the thread are correctly reclaimed when the thread exits.
+-- Detached threads are daemon threads without any explicit proper user interface.
+
+std::thread t(do_background_work);
+t.detach();
+assert(!t.joinable());
+
+To prevent passing incomplete objects that can result in 
+dangling references, the following syntax is used:
+
+void not_oops(int some_param)
+{
+  char buffer[1024]; 
+  sprintf(buffer,"%i",some_param); 
+  std::thread t(f,3,std::string(buffer)); //std:string avoids dangling pointer
+  t.detach();
+}
+
+Use std::ref to pass a reference as arg to the thread function.
+std::thread t(update_data_for_widget,w,std::ref(data));
+The function declaration
+void update_data_for_widget(widget_id w,widget_data& data);
+
+Also you can pass the member function to be invoked by the thread.
+std::thread t(&X::do_lengthy_work,&my_x);
+This code will invoke my_x.do_lengthy_work() on the new thread.
+
+Handling unique pointers to move objects between threads:
+
+      void process_big_object(std::unique_ptr<big_object>);
+      std::unique_ptr<big_object> p(new big_object);
+      p->prepare_data(42);
+      std::thread t(process_big_object,std::move(p));
+
+By specifying std::move(p) in the std::thread constructor, the ownership of the big_object 
+is transferred first into internal storage for the newly created thread and then into process_big_object.
+The move constructor and move assignment operator allow the ownership of an object to be trans- ferred
+around between std::unique_ptr instances
+
+Transferring ownership of a thread:
+Ownership of a particular thread of execution can be moved between std::thread instances
+
+
+
+std::thread::hardware_concurrency() returns an indication of the number of threads
+that can truly run concurrently for a given execution of a program. On a multicore system 
+it might be the number of CPU cores, for example. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
