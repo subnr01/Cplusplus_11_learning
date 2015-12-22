@@ -1,3 +1,5 @@
 C++ concurrency
 
+--Support for atomic instructions directly in C++.
+--
 
