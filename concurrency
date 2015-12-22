@@ -143,10 +143,21 @@ Transferring ownership of a thread:
 Ownership of a particular thread of execution can be moved between std::thread instances
 
 
-
 std::thread::hardware_concurrency() returns an indication of the number of threads
 that can truly run concurrently for a given execution of a program. On a multicore system 
 it might be the number of CPU cores, for example. 
+
+The identifier for a thread can be obtained from its associated std::thread object by calling
+the get_id() member function.
+std::thread::id master_thread;
+void some_core_part_of_algorithm()
+{
+    if(std::this_thread::get_id()==master_thread)
+    {
+        do_master_thread_work();
+    }
+    do_common_work();
+}
 
 
 
