@@ -1,1 +1,4 @@
 http://www.josuttis.com/cppbook/toc.html
+
+
+C++ 11 learning: http://codergears.com/Blog/?p=431
