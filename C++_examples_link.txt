@@ -19,3 +19,19 @@ https://www.youtube.com/playlist?list=PL1835A90FC78FF8BE
 
 http://www.cplusplus.com/reference/
 
+
+C++ threads
+http://thispointer.com/c-11-multithreading-part-1-three-different-ways-to-create-threads/
+
+https://www.classes.cs.uchicago.edu/archive/2013/spring/12300-1/labs/lab6/
+https://github.com/uchicago-cs/cmsc12300/tree/master/examples/cpp/concurrency/simple
+
+Good:
+http://www.bogotobogo.com/cplusplus/multithreaded4_cplusplus11.php
+
+
+
+http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
+http://marknelson.us/2012/05/23/c11-threading-made-easy/
+http://eli.thegreenplace.net/2016/c11-threads-affinity-and-hyperthreading/
+
