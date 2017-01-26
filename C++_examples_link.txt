@@ -2,3 +2,20 @@ http://www.josuttis.com/cppbook/toc.html
 
 
 C++ 11 learning: http://codergears.com/Blog/?p=431
+
+
+Nicholai: http://www.cppstdlib.com/
+
+
+C++ 11 threads: https://solarianprogrammer.com/2011/12/16/cpp-11-thread-tutorial/
+
+
+C++ concurrency: http://www.cplusplusconcurrencyinaction.com/toc.html
+
+
+Bartosz:
+https://bartoszmilewski.com/
+https://www.youtube.com/playlist?list=PL1835A90FC78FF8BE
+
+http://www.cplusplus.com/reference/
+
